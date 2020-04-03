@@ -2,9 +2,15 @@
 
 const axios = require('axios');
 
+// OFF、WARN、DEBUG、ALL
+let console_level = 'DEBUG';
+
 const getHtml = url => {
   return new Promise((resolve, reject) => {
-    console.info('--- 开始爬取资源 ---');
+    if (['DEBUG', 'ALL'].includes(console_level)) {
+      console.time('req-spider-end');
+      console.info('req-spider-start');
+    }
 
     axios.get(url)
       .then(res => {
@@ -14,18 +20,29 @@ const getHtml = url => {
           const content = res.data.match(reg);
           // 进一步解析
           const urlList = content.map(item => item.split('display_url":"')[1].replace(/\\u0026/g, '&'));
-          console.debug([...new Set(urlList)]);
           // 去重返回
+          if (['DEBUG', 'ALL'].includes(console_level)) {
+            console.debug(urlList);
+          }
           resolve([...new Set(urlList)]);
         }
       })
       .catch(err => {
+        if (['WARN', 'DEBUG', 'ALL'].includes(console_level)) {
+          console.warn(err);
+        }
         reject('Instagram Spider Error: ' + err)
       })
       .finally(() => {
-        console.info('--- 爬取资源结束 ---');
+        if (['DEBUG', 'ALL'].includes(console_level)) {
+          console.timeEnd('req-spider-end');
+        }
       });
   });
 };
 
-module.exports = getHtml;
+const setConsoleLevel = level => {
+  console_level = level;
+};
+
+module.exports = { getHtml, setConsoleLevel };

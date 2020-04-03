@@ -1,7 +1,8 @@
 'use static';
 
-const spider = require('./bin/spider');
+const { getHtml, setConsoleLevel } = require('./bin/spider');
 
 module.exports = {
-  spider,
+  spider: getHtml,
+  setConsoleLevel,
 };

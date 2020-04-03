@@ -8,4 +8,7 @@ module.exports = {
   MONGO_HOST: env.MONGO_HOST || 'localhost',
   MONGO_PORT: env.MONGO_PORT || '15498',
   MONGO_DB: env.MONGO_DB || 'webpack_project',
+
+  // OFF、WARN、DEBUG、ALL
+  console_level: 'WARN'
 };

@@ -1,6 +1,8 @@
 'use static';
 
-const { spider } = require('./index');
+const { spider, setConsoleLevel } = require('./index');
+
+setConsoleLevel('OFF');
 
 // test
 (async function () {
