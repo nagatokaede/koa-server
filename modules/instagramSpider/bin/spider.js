@@ -14,8 +14,9 @@ const getHtml = url => {
           const content = res.data.match(reg);
           // 进一步解析
           const urlList = content.map(item => item.split('display_url":"')[1].replace(/\\u0026/g, '&'));
+          console.debug([...new Set(urlList)]);
           // 去重返回
-          resolve(new Set(urlList));
+          resolve([...new Set(urlList)]);
         }
       })
       .catch(err => {
