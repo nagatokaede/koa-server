@@ -16,12 +16,10 @@ const getHtml = url => {
           const urlList = content.map(item => item.split('display_url":"')[1].replace(/\\u0026/g, '&'));
           // 去重返回
           resolve(new Set(urlList));
-        } else {
-          reject(res);
         }
       })
       .catch(err => {
-        reject(err)
+        reject('Instagram Spider Error: ' + err)
       })
       .finally(() => {
         console.info('--- 爬取资源结束 ---');
