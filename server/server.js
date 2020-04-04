@@ -11,6 +11,7 @@ const app = new koa();
 app.use(logger);
 
 app.use(router.routes());
+app.use(router.allowedMethods());
 
 app.listen(PORT);
 console.info('server run http://localhost:' + PORT);

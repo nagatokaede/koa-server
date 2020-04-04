@@ -1,5 +1,6 @@
 const logger = require('koa-logger');
 const writeLog = require('../util/writeLogger');
+const { NODE_ENV } = require('../server/config');
 
 const writeLogger = async args => {
   const file = __dirname + '/../logs/out.log';
@@ -11,5 +12,5 @@ const writeLogger = async args => {
 
 module.exports = logger((str, args) => {
   console.info(str);
-  writeLogger(args);
+  if (NODE_ENV === 'development') writeLogger(args);
 });
