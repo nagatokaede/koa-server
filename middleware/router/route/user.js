@@ -3,19 +3,14 @@
 const Router = require('koa-router');
 const { succeedUtil, failedUtil } = require('../../../util/response');
 
-const router = new Router({
-  prefix: '/user'
-});
+const router = new Router();
 
-// 单个用户增删改查
+// 单个用户删改查
 router
   .get('/:id', ctx => {
     const data = {};
-    Object.assign(data, ctx.params, ctx.query);
+    Object.assign(data, ctx.params, ctx.query, ctx.tokenInfo);
     ctx.body = succeedUtil(data);
-  })
-  .post('/', ctx => {
-    // ...
   })
   .put('/:id', ctx => {
     // ...

@@ -10,11 +10,11 @@ const succeedUtil = res => {
 
 // 失败响应
 const failedUtil = (errorMessage, errorCode) => {
-  return {
+  return JSON.stringify({
     status: 'FAILED',
     errorCode,
     errorMessage,
-  };
+  });
 };
 
 module.exports = {

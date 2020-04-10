@@ -1,12 +1,14 @@
 'use static';
 
 const Router = require('koa-router');
-const admin = require('./route/admin'),
-  ins = require('./route/instagram');
+const user = require('./route/user'),
+  ins = require('./route/instagram'),
+  admin = require('./route/serverAdmin');
 
 const router = new Router();
 
-router.use('/admin', admin.routes());
+router.use('/user', user.routes());
 router.use('/ins', ins.routes());
+router.use('/admin', admin.routes());
 
 module.exports = router;
