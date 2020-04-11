@@ -2,6 +2,8 @@
 
 const { PORT } = require('./config');
 
+require('../modules/mongo').mongo;
+
 const koa = require('koa');
 const koaBody = require('koa-body');
 
