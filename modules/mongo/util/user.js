@@ -123,8 +123,11 @@ const userInsert = body => {
     userFindOne({ userName: body.userName })
       .then(res => {
         // 用户已存在
-        if (res.status !== 0) resolve('用户名已存在');
-  
+        if (res.status !== 0) {
+          resolve('用户名已存在');
+          return 0;
+        }
+
         // 创建用户数据
         const createUser = new userModel({
           userName: body.userName,

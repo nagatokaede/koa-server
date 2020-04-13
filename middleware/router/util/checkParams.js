@@ -8,10 +8,13 @@ const dictionaries = {
 };
 
 module.exports = (params, filter) => {
-  filter.forEach(key => {
-    if (!params.key) return key + ' 缺失';
-    
-    if (typeof params.key !== dictionaries.key) return key + ' 应为 ' + dictionaries.key + ' 类型';
-  });
+  let msg = {};
+  for (const key of filter) {
+    if (!params[key]) msg[key] = 'missing';
+    if (msg[key]) continue;
+
+    if (typeof params[key] !== dictionaries[key]) msg[key] = dictionaries[key];
+  }
+  return msg;
 };
 

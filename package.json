@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node server/server",
-    "server": "pm2 server/server"
+    "dev": "pm2 start ecosystem.config.js --env --watch",
+    "server": "pm2 start server/server.js"
   },
   "author": "nagato",
   "license": "ISC",
