@@ -10,7 +10,8 @@ module.exports = {
     args: 'one two',
     instances: 1,
     autorestart: true,
-    watch: false,
+    watch: ['server', 'middleware', 'modules', 'util'],
+    ignore_watch : ['node_modules', 'public', 'logs', 'test'],
     max_memory_restart: '100M',
     env: {
       NODE_ENV: 'development'
