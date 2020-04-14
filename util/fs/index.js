@@ -5,21 +5,21 @@ const path = require('path');
 
 /**
  * 检测目录或文件
- * param [string] path - 目录或文件的路径
+ * @param {string} dirname - 目录或文件的路径
  */
 const accessSync = dirname => fs.accessSync(dirname, fs.constants.F_OK);
 
 /**
  * 创建目录
- * param [string] path - 目录
+ * @param {string} dirname - 目录
  */
 const mkdirSync = dirname => fs.mkdirSync(dirname);
 
 /**
  * 尾递归创建文件夹
- * param [string] dir - 文件目录
- * param [number] pointer - 目录指针，表示当前处理哪一层
- * param [number] direction - 目录递归方向 1 下潜 0 上浮
+ * @param {string} dirname - 文件目录
+ * @param {number} pointer - 目录指针，表示当前处理哪一层
+ * @param {number} direction - 目录递归方向 1 下潜 0 上浮
  */
 const mkdir = (dirname, pointer = dirname.split(path.sep).length , direction = 1) => {
   if (direction) { // 正向 判断目录边界
@@ -54,8 +54,9 @@ const mkdir = (dirname, pointer = dirname.split(path.sep).length , direction = 1
 
 /**
  * 小文件写入
- * param [string] path - 文件保存路径
- * param [file] data - file
+ * @param {string} dirname - 文件保存路径
+ * @param {string} fileName - 文件名
+ * @param {file} data - file
  */
 const writeFile = async (dirname, fileName, data) => {
   // 创建文件夹
