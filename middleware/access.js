@@ -3,7 +3,7 @@
 const { failedUtil } = require('../util/response');
 const JWT = require('../util/jwt');
 
-module.exports = (option = []) => {
+module.exports = (option = [], exp) => {
   return async (ctx, next) => {
     let tokenInfo;
 
@@ -32,7 +32,7 @@ module.exports = (option = []) => {
 
     // 签署新的 token 并写入响应 header 中
     if (tokenInfo) {
-      ctx.set('token', await JWT.sign(tokenInfo));
+      ctx.set('token', await JWT.sign(tokenInfo, exp));
     }
   };
 };

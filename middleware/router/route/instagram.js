@@ -16,36 +16,35 @@ const router = new Router();
 
 router
   .get('/search', async ctx => {
-    let urls,ossList;
+    let urls,ossList,warnUrls = [];
 
+    // 爬取图片列表
     try {
       urls = await ins.spider('https://www.instagram.com/p/BvYbAbrBU8v/?utm_source=ig_share_sheet&igshid=betpf9thpwz5');
     } catch (err) {
-      ctx.throw(500, failedUtil(err, '001'));
-      return 0;
+      ctx.throw(err);
     }
 
     console.info(urls);
-  
+
+    // 建立 axios 下载通道，建立阿里云OSS上传列表
     ossList = urls.map(async url => {
-      return putStream(path.basename(url), await downloadFile(url));
-    });
-  
+      try {
+        return putStream(path.basename(url), await downloadFile(url));
+      } catch (err) {
+        console.warn(err);
+        warnUrls.push(url);
+        return '';
+      }
+    }).filter(item => item);
+
+    // 批量上传
     try {
       const urls = await upFiles(ossList);
-      ctx.body = succeedUtil(urls);
+      ctx.body = succeedUtil({ urls, warnUrls });
     } catch (err) {
       ctx.throw(500, failedUtil(err, '001'));
     }
   });
-  // .post('/', ctx => {
-  //   // ...
-  // })
-  // .put('/', ctx => {
-  //   // ...
-  // })
-  // .del('/', ctx => {
-  //   // ...
-  // });
 
 module.exports = router;

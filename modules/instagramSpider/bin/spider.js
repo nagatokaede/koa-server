@@ -31,7 +31,7 @@ const getHtml = url => {
         if (['WARN', 'DEBUG', 'ALL'].includes(console_level)) {
           console.warn(err);
         }
-        reject('Instagram Spider Error: ' + err)
+        reject('Instagram Spider Error: ' + err.code);
       })
       .finally(() => {
         if (['DEBUG', 'ALL'].includes(console_level)) {

@@ -14,19 +14,20 @@ const router = new Router();
 
 
 router.post('/easy', async ctx => {
-  console.log('upload', '开始上传OSS', new Date().getTime());
+  // 获取上传文件地址，创建阿里云OSS流上传列表
+  // const ossList = Object.values(ctx.request.files).map(item => {
+  //   return putStream(path.basename(item.path), fs.createReadStream(item.path))
+  // });
+  //
+  // try {
+  //   // 批量上传阿里云OSS
+  //   const urls = await upFiles(ossList);
+  //   ctx.body = succeedUtil(urls);
+  // } catch (err) {
+  //   ctx.throw(500, failedUtil(err, '001'));
+  // }
 
-  const ossList = Object.values(ctx.request.files).map(item => {
-    return putStream(path.extname(item.path), fs.createReadStream(item.path))
-  });
-
-  try {
-    const urls = await upFiles(ossList);
-    ctx.body = succeedUtil(urls);
-  } catch (err) {
-    ctx.throw(500, failedUtil(err, '001'));
-  }
-  console.log(new Date().getTime());
+  ctx.body = succeedUtil(ctx.request.files);
 });
 
 module.exports = router;
