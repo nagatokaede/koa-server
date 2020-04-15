@@ -19,7 +19,7 @@ const app = new koa();
 
 app.use(logger);
 
-app.use(access(['admin'], '60m'));
+app.use(access(['admin', 'upload'], '60m'));
 
 const upload = ctx => {
   return new Promise((resolve, reject) => {
@@ -31,7 +31,7 @@ const upload = ctx => {
 
     // 创建目录
     mkdir(dirname);
-    console.timeLog('upload', 'mkdir');
+    console.info('upload', 'mkdir');
 
     busboy.on('file', function(fieldName, file, filename, encoding, mimetype) {
       console.log(`File [${fieldName}]: filename: ${filename}`);
@@ -56,7 +56,7 @@ const upload = ctx => {
       // 解析文件结束
       file.on('end', function() {
         console.log(`File [${fieldName}] Finished`);
-        console.timeEnd('upload');
+        console.info('upload');
       });
     });
 
@@ -83,8 +83,7 @@ const upload = ctx => {
 };
 
 app.use(async (ctx, next) => {
-  if (ctx.headers['content-type'].includes('multipart/form-data')) {
-    console.time('upload');
+  if (ctx.headers['content-type'] && ctx.headers['content-type'].includes('multipart/form-data')) {
     console.info('upload start');
     try {
       const msg = await upload(ctx);
