@@ -14,7 +14,7 @@ const logger = require('../middleware/logger');
 const router = require('../middleware/router');
 const access = require('../middleware/access');
 
-const upload = require('../modules/upload');
+const upload = require('../middleware/upload');
 const { putStream } = require('../modules/oss');
 
 const app = new koa();

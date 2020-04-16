@@ -7,7 +7,8 @@ const { mkdir } = require('../../util/fs');
 
 const upload = (ctx, options) => {
   return new Promise((resolve, reject) => {
-    let field,url,msg;
+    let field,msg;
+    if (!ctx.request.files) ctx.request.files = {};
     // 创建目录
     if (!options.streamFunction) mkdir(path.join(options.root, options.path));
 
@@ -15,21 +16,20 @@ const upload = (ctx, options) => {
     const busboy = new Busboy({ headers: req.headers });
   
     busboy.on('file', function (fieldName, file, filename, encoding, mimeType) {
-      console.log(`File [${fieldName}]: filename: ${filename} encoding: ${encoding} mimeType: ${mimeType}`);
+      console.info(`File [${fieldName}]: filename: ${filename} encoding: ${encoding} mimeType: ${mimeType}`);
       field = fieldName;
+      // 本地存储地址
+      const filePath = path.join(options.root, options.path, options.name || filename);
+      // 网络展示地址
+      const url = path.join(options.path, options.name || filename).replace(/\\/g, '/');
+
       // 过滤
       if(!options.filter.includes(path.extname(filename).slice(1).toLowerCase())) {
         msg = 'upload file type error';
         file.resume(); // 跳出上传
         return 0;
       }
-    
-      // 本地存储地址
-      const filePath = path.join(options.root, options.path, options.name || filename);
 
-      // 网络展示地址
-      url = path.join(options.path, options.name || filename).replace(/\\/g, '/');
-    
       // 文件上传OSS或保存到特定路径
       if (options.streamFunction) {
         options.streamFunction(file, url);
@@ -44,6 +44,7 @@ const upload = (ctx, options) => {
     
       // 解析文件结束
       file.on('end', function () {
+        ctx.request.files[field] = url;
         console.info(`File [${fieldName}] Finished`);
       });
     });
@@ -52,8 +53,7 @@ const upload = (ctx, options) => {
     busboy.on('finish', () => {
       console.info('upload finish');
       // 将地址传入上下文
-      if (!ctx.request.files) ctx.request.files = {};
-      ctx.request.files[field] = url || msg;
+      if (!ctx.request.files[field]) ctx.request.files[field] = msg;
       console.info(ctx.request.files);
       resolve('upload finish');
     });
