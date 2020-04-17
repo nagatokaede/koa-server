@@ -30,7 +30,7 @@ router
     // 建立 axios 下载通道，建立阿里云OSS上传列表
     ossList = urls.map(async url => {
       try {
-        return putStream(path.basename(url), await downloadFile(url));
+        return putStream(path.basename(url.split('?')[0]), await downloadFile(url));
       } catch (err) {
         console.warn(err);
         warnUrls.push(url);
