@@ -10,16 +10,18 @@ module.exports = {
     // args: 'one two',
     instances: 1,
     autorestart: true,
-    watch: ['server', 'middleware', 'modules', 'util'], // 监听
-    ignore_watch : ['node_modules', 'public', 'logs', 'test'], // 监听过滤
+    // watch: ['server', 'middleware', 'modules', 'util'], // 监听
+    // ignore_watch : ['node_modules', 'public', 'logs', 'test'], // 监听过滤
     max_memory_restart: '100M', // 最大内存占用数
     // max_restarts: 20, // 最大重启数
-    restart_delay: 10000, // 重启间隔 10 s
+    // restart_delay: 10000, // 重启间隔 10 s
+    exec_mode: "fork", // fork 方式启动
     env: {
-      NODE_ENV: 'development'
-    },
-    env_production: {
-      NODE_ENV: 'production'
+      NODE_ENV: 'production',
+      OSS_region: 'oss-cn-shanghai', // OSS 服务区域
+      OSS_accessKeyId: '', // AccessKeyId
+      OSS_accessKeySecret: '', // AccessKeySecret
+      OSS_internal: true, // 是否内网访问，生产环境内网访问
     }
   }],
 
