@@ -17,12 +17,11 @@ module.exports = {
     // restart_delay: 10000, // 重启间隔 10 s
     exec_mode: "fork", // fork 方式启动
     env: {
+      NODE_ENV: 'development',
+    },
+    env_pro: {
       NODE_ENV: 'production',
-      OSS_region: 'oss-cn-shanghai', // OSS 服务区域
-      OSS_accessKeyId: '', // AccessKeyId
-      OSS_accessKeySecret: '', // AccessKeySecret
-      OSS_internal: true, // 是否内网访问，生产环境内网访问
-    }
+    },
   }],
 
   // deploy : {
