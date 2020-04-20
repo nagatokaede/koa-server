@@ -5,6 +5,10 @@ const dictionaries = {
   userName: 'string',
   password: 'string',
   nickName: 'string',
+
+  region: 'string',
+  accessKeyId: 'string',
+  accessKeySecret: 'string',
 };
 
 module.exports = (params, filter) => {

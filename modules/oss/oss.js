@@ -1,24 +1,36 @@
 'use static';
 
 const OSS = require('ali-oss');
-const { OSS_accessKeyId, OSS_accessKeySecret, OSS_region, OSS_internal } = require('../../server/config');
+// const { ossInfo.accessKeyId, ossInfo.accessKeySecret, ossInfo.region, ossInfo.internal } = require('../../server/config');
+// 配置查询
+const { config } = require('../../modules/mongo');
 
-const clientBucket = new OSS({
-  region: OSS_region,
-  accessKeyId: OSS_accessKeyId,
-  accessKeySecret: OSS_accessKeySecret,
-  internal: OSS_internal,
-});
+(async function () {
+  try {
+    const ossInfo = await config.configFind();
 
-const client = new OSS({
-  region: OSS_region,
-  accessKeyId: OSS_accessKeyId,
-  accessKeySecret: OSS_accessKeySecret,
-  internal: OSS_internal,
-  bucket: 'kaede-oss',
-});
+    const clientBucket = new OSS({
+      region: ossInfo.region,
+      accessKeyId: ossInfo.accessKeyId,
+      accessKeySecret: ossInfo.accessKeySecret,
+      internal: ossInfo.internal || false,
+    });
 
-module.exports = {
-  clientBucket,
-  client,
-};
+    const client = new OSS({
+      region: ossInfo.region,
+      accessKeyId: ossInfo.accessKeyId,
+      accessKeySecret: ossInfo.accessKeySecret,
+      internal: ossInfo.internal || false,
+      bucket: 'kaede-oss',
+    });
+
+    module.exports = {
+      clientBucket,
+      client,
+    };
+  } catch (e) {
+    console.warn(e);
+  }
+})();
+
+
