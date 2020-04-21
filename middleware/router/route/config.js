@@ -1,7 +1,7 @@
 'use static';
 
 const Router = require('koa-router');
-const { configFind, configInsert } = require('../../../modules/mongo').config;
+const { configFind, configInsert, configChange } = require('../../../modules/mongo').config;
 const { succeedUtil, failedUtil } = require('../../../util/response');
 const check = require('../util/checkParams');
 
@@ -26,6 +26,18 @@ router
     try {
       await configInsert(body);
       ctx.body = succeedUtil('success');
+    } catch (err) {
+      ctx.throw(500, failedUtil(err, '001'));
+    }
+  })
+  .put('/change', async ctx => {
+    // 获取参数
+    const body = ctx.request.body;
+
+    try {
+      const msg = await configChange(body);
+      console.log(msg);
+      ctx.body = succeedUtil(msg);
     } catch (err) {
       ctx.throw(500, failedUtil(err, '001'));
     }

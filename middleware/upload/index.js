@@ -14,7 +14,7 @@ const upload = (ctx, options) => {
 
     const req = ctx.req;
     const busboy = new Busboy({ headers: req.headers });
-  
+
     busboy.on('file', function (fieldName, file, filename, encoding, mimeType) {
       console.info(`File [${fieldName}]: filename: ${filename} encoding: ${encoding} mimeType: ${mimeType}`);
       field = fieldName;
@@ -32,16 +32,16 @@ const upload = (ctx, options) => {
 
       // 文件上传OSS或保存到特定路径
       if (options.streamFunction) {
-        options.streamFunction(file, url);
+        options.streamFunction(file, url, ctx);
       } else {
         file.pipe(fs.createWriteStream(filePath));
       }
-    
+
       // 开始解析文件流
       file.on('data', function (data) {
         console.info(`File [${fieldName}] got ${data.length} bytes`);
       });
-    
+
       // 解析文件结束
       file.on('end', function () {
         ctx.request.files[field] = url;
@@ -63,7 +63,7 @@ const upload = (ctx, options) => {
       console.warn('upload error: ' + err);
       reject('upload error');
     });
-  
+
     req.pipe(busboy);
   });
 };

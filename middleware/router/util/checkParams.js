@@ -9,6 +9,8 @@ const dictionaries = {
   region: 'string',
   accessKeyId: 'string',
   accessKeySecret: 'string',
+
+  url: 'string',
 };
 
 module.exports = (params, filter) => {

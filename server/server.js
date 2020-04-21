@@ -14,16 +14,25 @@ const access = require('../middleware/access');
 const upload = require('../middleware/upload');
 const { putStream } = require('../modules/oss');
 
+// 配置查询
+const { configFind } = require('../modules/mongo').config;
+
 const app = new koa();
 
 app.use(logger);
 
 app.use(access(['admin', 'upload'], '60m'));
 
+// 查询 oss 信息
+app.use(async (ctx , next) => {
+  ctx.ossInfo = await configFind();
+  await next();
+});
+
 // 上传文件到OSS
 app.use(upload({
-  streamFunction: (stream, name) => {
-    putStream(name, stream);
+  streamFunction: (stream, name, ctx) => {
+    putStream(name, stream, ctx.ossInfo);
   },
 }));
 

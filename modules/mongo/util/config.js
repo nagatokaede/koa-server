@@ -34,7 +34,47 @@ const configInsert = body => {
   });
 };
 
+/**
+ * ------- 修改用户密码 ---------
+ * body {
+ *   userName: <String> 用户名
+ *   password: <String> 密码
+ *   newPassword: <String> 新密码
+ *   nickName: <string> 昵称
+ * }
+ */
+const configChange = body => {
+  return new Promise((resolve, reject) => {
+    configFind()
+      .then(docs => {
+        if (docs) {
+          configModel.updateOne(
+            {_id: docs._id},
+            {$set: {
+                region: body.region || docs.region,
+                accessKeyId: body.accessKeyId || docs.accessKeyId,
+                accessKeySecret: body.accessKeySecret || docs.accessKeySecret,
+                internal: body.internal || docs.internal,
+                bucket: body.bucket || docs.bucket,
+              }})
+            .then(() => {
+              resolve('config set success');
+            })
+            .catch(err => {
+              reject('config set failed: ' + err);
+            });
+        } else {
+          resolve('config not found')
+        }
+      })
+      .catch(err => {
+        reject('config set failed: ' + err);
+      });
+  });
+};
+
 module.exports = {
   configFind,
-  configInsert
+  configInsert,
+  configChange
 };
