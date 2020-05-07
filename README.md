@@ -18,11 +18,23 @@ koa-server
 启动
 --------------------------------
 ```Bash
-$ npm i // 添加包
+# 添加包
+$ npm i
 
-$ npm run dev // 开发 运行服务
+# 启动 mongo
+$ mongod --dbpath [path] --port 15498
 
-$ npm run server // 生产 运行服务
+# 连接 mango
+$ mongo mongodb://user:password@host:port/webapp-node-project
+
+# mongo 中添加 oss 配置信息
+$ db.config.insert({ region: "", accessKeyId: "", accessKeySecret: "" })
+
+# 开发 运行服务
+$ npm run dev
+
+# 生产 运行服务
+$ npm run server
 ```
 
 技术栈
