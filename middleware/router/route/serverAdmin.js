@@ -22,7 +22,7 @@ router
       // 查询用户
       const userInfo = await userFindOne({ userName: body.userName });
       if (typeof userInfo.status === 'number' || hash(body.password) !== userInfo.password) {
-        ctx.body = succeedUtil('用户名或密码错误');
+        ctx.body = failedUtil('用户名或密码错误', '002');
         return 0;
       }
       // 签发 token
