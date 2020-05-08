@@ -36,13 +36,14 @@ router
     // 解析文件名
     const regexp = /(?!.*\/).*(jpg|jepg|png)/gi;
     // 建立鉴定组
-    judgeList = insUrls.map(async url => {
+    judgeList = insUrls.map( url => {
       return judge(url.match(regexp)[0], ctx.ossInfo).then(res => {
         // 删除已存在的 insUrl
         const index = insUrls.indexOf(res);
         if (index > -1) insUrls.splice(index, 1);
         // 记录oss地址
         urls.push(res);
+        console.info(res);
       });
     });
     // 批量鉴定
