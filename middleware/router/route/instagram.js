@@ -1,7 +1,6 @@
 'use static';
 
 const Router = require('koa-router');
-const path = require('path');
 const ins = require('../../../modules/instagramSpider');
 const { downloadFile } = require('../../../modules/axios');
 const { putStream, judge } = require('../../../modules/oss');
@@ -9,7 +8,7 @@ const { console_level } = require('../../../server/config');
 const { succeedUtil, failedUtil } = require('../../../util/response');
 const check = require('../util/checkParams');
 
-const upFiles = require('../util/batchOSS');
+const reqAll = require('../util/batchOSS');
 
 ins.setConsoleLevel(console_level);
 
@@ -17,7 +16,8 @@ const router = new Router();
 
 router
   .post('/search', async ctx => {
-    let judgeList,ossList,urls = [];
+    let judgeList,ossList,insUrls = [];
+    const urls = [];
     const warnUrls = [];
     // 获取参数
     const body = ctx.request.body;
@@ -27,38 +27,41 @@ router
 
     // 爬取图片列表
     try {
-      urls = await ins.spider(body.url);
-      console.info(urls);
+      insUrls = await ins.spider(body.url);
+      console.info(insUrls);
     } catch (err) {
       ctx.throw(err);
     }
 
     // 解析文件名
     const regexp = /(?!.*\/).*(jpg|jepg|png)/gi;
+    // 建立鉴定组
+    judgeList = insUrls.map(async url => {
+      return judge(url.match(regexp)[0], ctx.ossInfo).then(res => {
+        // 删除已存在的 insUrl
+        const index = insUrls.indexOf(res);
+        if (index > -1) insUrls.splice(index, 1);
+        // 记录oss地址
+        urls.push(res);
+      });
+    });
+    // 批量鉴定
+    await reqAll(judgeList);
 
     // 建立 axios 下载通道，建立阿里云OSS上传列表
-    ossList = urls.map(async url => {
+    ossList = insUrls.map(async url => {
       try {
-        const judgeUrl = await judge(url.match(regexp)[0], ctx.ossInfo);
-        console.info(judgeUrl);
-        judgeList.push(judgeUrl);
+        return putStream(url.match(regexp)[0], await downloadFile(url), ctx.ossInfo);
+      } catch (err) {
+        console.warn(err);
+        warnUrls.push(url);
         return '';
-      } catch (e) {
-        try {
-          return putStream(url.match(regexp)[0], await downloadFile(url), ctx.ossInfo);
-        } catch (err) {
-          console.warn(err);
-          warnUrls.push(url);
-          return '';
-        }
       }
     }).filter(item => item);
 
     // 批量上传
     try {
-      urls = await upFiles(ossList);
-      console.info(urls);
-      urls.concat(judgeList);
+      urls.concat(await reqAll(ossList));
       ctx.body = succeedUtil({ urls, warnUrls });
     } catch (err) {
       ctx.throw(500, failedUtil(err, '001'));

@@ -1,5 +1,5 @@
 'use static';
 
-const upFiles = ossList => Promise.all([...ossList]);
+const reqAll = ossList => Promise.all([...ossList]);
 
-module.exports = upFiles;
+module.exports = reqAll;
