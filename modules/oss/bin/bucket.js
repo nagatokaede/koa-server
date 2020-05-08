@@ -2,15 +2,25 @@
 
 /********************* 存储空间管理 *****************************/
 
-const client = require('../oss').clientBucket;
+const OSS = require('ali-oss');
 
+function createClient(options) {
+  return new OSS({
+    region: options.region,
+    accessKeyId: options.accessKeyId,
+    accessKeySecret: options.accessKeySecret,
+  });
+}
 
 /**
  * 创建存储空间
  * @param {string} bucketName - your bucket name
+ * @param {object} clientOptions
  * @return {Promise<void>}
  */
-async function putBucket(bucketName) {
+async function putBucket(bucketName, clientOptions) {
+  const client = createClient(clientOptions);
+
   try {
     const result = await client.putBucket(bucketName);
     return result.res ? `create ${bucketName} bucket ${result.res.statusMessage}` : result;
@@ -30,9 +40,12 @@ async function putBucket(bucketName) {
  *   Encoding-type {string} - 对返回的内容进行编码并指定编码的类型。
  * }
  * @param {object} options
+ * @param {object} clientOptions
  * @return {Promise<void>}
  */
-async function listBuckets(options) {
+async function listBuckets(options, clientOptions) {
+  const client = createClient(clientOptions);
+
   try {
     const result = await client.listBuckets(options);
     return result.buckets;
@@ -46,9 +59,12 @@ async function listBuckets(options) {
  * 设置存储空间访问权限
  * @param {string} bucketName - your bucket name
  * @param {string} option - [ private(私有), public-read(公共读), public-read-write(公共读写) ]
+ * @param {object} clientOptions
  * @return {Promise<void>}
  */
-async function putBucketACL(bucketName, option) {
+async function putBucketACL(bucketName, option, clientOptions) {
+  const client = createClient(clientOptions);
+
   try {
     const result = await client.putBucketACL(bucketName, option);
     return result.res ? `set ${bucketName} bucket ${option} ${result.res.statusMessage}` : result;
@@ -61,9 +77,12 @@ async function putBucketACL(bucketName, option) {
 /**
  * 获取存储空间访问权限
  * @param {string} bucketName - your bucket name
+ * @param {object} clientOptions
  * @return {Promise<void>}
  */
-async function getBucketACL(bucketName) {
+async function getBucketACL(bucketName, clientOptions) {
+  const client = createClient(clientOptions);
+
   try {
     const result = await client.getBucketACL(bucketName);
     return result.acl;
@@ -77,9 +96,12 @@ async function getBucketACL(bucketName) {
  * 删除存储空间
  * 删除存储空间之前，必须先删除存储空间下的所有文件、LiveChannel和分片上传产生的碎片。
  * @param {string} bucketName - your bucket name
+ * @param {object} clientOptions
  * @return {Promise<void>}
  */
-async function deleteBucket(bucketName) {
+async function deleteBucket(bucketName, clientOptions) {
+  const client = createClient(clientOptions);
+
   try {
     const result = await client.deleteBucket(bucketName);
     return result.res ? `delete ${bucketName} bucket OK` : result;

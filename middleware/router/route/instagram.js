@@ -4,7 +4,7 @@ const Router = require('koa-router');
 const path = require('path');
 const ins = require('../../../modules/instagramSpider');
 const { downloadFile } = require('../../../modules/axios');
-const { putStream } = require('../../../modules/oss');
+const { putStream, judge } = require('../../../modules/oss');
 const { console_level } = require('../../../server/config');
 const { succeedUtil, failedUtil } = require('../../../util/response');
 const check = require('../util/checkParams');
@@ -17,7 +17,8 @@ const router = new Router();
 
 router
   .post('/search', async ctx => {
-    let urls,ossList,warnUrls = [];
+    let insUrls,ossList,urls = [];
+    const warnUrls = [];
     // 获取参数
     const body = ctx.request.body;
     // 检验参数
@@ -26,21 +27,27 @@ router
 
     // 爬取图片列表
     try {
-      urls = await ins.spider(body.url);
+      insUrls = await ins.spider(body.url);
+      console.info(insUrls);
     } catch (err) {
       ctx.throw(err);
     }
 
-    console.info(urls);
+    // 解析文件名
+    const regexp = /(?!.*\/).*(jpg|jepg|png)/gi;
 
     // 建立 axios 下载通道，建立阿里云OSS上传列表
     ossList = urls.map(async url => {
       try {
-        return putStream(path.basename(url.split('?')[0]), await downloadFile(url), ctx.ossInfo);
-      } catch (err) {
-        console.warn(err);
-        warnUrls.push(url);
-        return '';
+        return await judge(url.match(regexp)[0], ctx.ossInfo);
+      } catch (e) {
+        try {
+          return putStream(url.match(regexp)[0], await downloadFile(url), ctx.ossInfo);
+        } catch (err) {
+          console.warn(err);
+          warnUrls.push(url);
+          return '';
+        }
       }
     }).filter(item => item);
 

@@ -2,7 +2,6 @@
 
 /********************* 上传文件管理 *****************************/
 
-// const { client } = require('../oss');
 const OSS = require('ali-oss');
 
 /**

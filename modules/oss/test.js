@@ -62,24 +62,32 @@ const fs = require('fs');
 // })();
 
 // 上传 测试
-(async function () {
-  let msg = '';
+// (async function () {
+//   let msg = '';
+//
+//   try {
+//     const stream = fs.createReadStream(__filename);
+//     msg = await ossApi.putStream('test.js', stream);
+//   } catch (e) {
+//     console.warn(e);
+//   }
+//
+//   console.info(msg);
+//
+//   try {
+//     msg = await ossApi.put('test2.js', __filename);
+//   } catch (e) {
+//     console.warn(e);
+//   }
+//
+//   console.info(msg);
+// })();
 
-  try {
-    const stream = fs.createReadStream(__filename);
-    msg = await ossApi.putStream('test.js', stream);
-  } catch (e) {
-    console.warn(e);
-  }
+// 查询测试
+const options = {
+  region: "oss-cn-shanghai",
+  accessKeyId: "",
+  accessKeySecret: "",
+};
 
-  console.info(msg);
-
-  try {
-    msg = await ossApi.put('test2.js', __filename);
-  } catch (e) {
-    console.warn(e);
-  }
-
-  console.info(msg);
-})();
-
+ossApi.judge('83592580_2805425739515761_7827284750852853400_n.jpg', options);
