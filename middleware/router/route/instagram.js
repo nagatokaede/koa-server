@@ -17,7 +17,7 @@ const router = new Router();
 
 router
   .post('/search', async ctx => {
-    let insUrls,ossList,urls = [];
+    let insUrls,judgeList,ossList,urls = [];
     const warnUrls = [];
     // 获取参数
     const body = ctx.request.body;
@@ -39,7 +39,10 @@ router
     // 建立 axios 下载通道，建立阿里云OSS上传列表
     ossList = urls.map(async url => {
       try {
-        return await judge(url.match(regexp)[0], ctx.ossInfo);
+        const judgeUrl = await judge(url.match(regexp)[0], ctx.ossInfo);
+        console.info(judgeUrl);
+        judgeList.push(judgeUrl);
+        return '';
       } catch (e) {
         try {
           return putStream(url.match(regexp)[0], await downloadFile(url), ctx.ossInfo);
@@ -53,7 +56,9 @@ router
 
     // 批量上传
     try {
-      const urls = await upFiles(ossList);
+      urls = await upFiles(ossList);
+      console.info(urls);
+      urls.concat(judgeList);
       ctx.body = succeedUtil({ urls, warnUrls });
     } catch (err) {
       ctx.throw(500, failedUtil(err, '001'));
