@@ -45,3 +45,7 @@ app.use(Static(path.join(__dirname, '../public/')));
 
 app.listen(PORT);
 console.info('server run http://localhost:' + PORT);
+
+app.on('error', err => {
+  console.error('server error: ', err);
+});

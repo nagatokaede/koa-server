@@ -47,7 +47,6 @@ router
     // 批量上传
     try {
       const urls = await upFiles(ossList);
-      console.info(urls, warnUrls);
       ctx.body = succeedUtil({ urls, warnUrls });
     } catch (err) {
       ctx.throw(500, failedUtil(err, '001'));
