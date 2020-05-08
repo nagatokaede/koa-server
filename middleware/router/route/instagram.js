@@ -16,17 +16,17 @@ ins.setConsoleLevel(console_level);
 const router = new Router();
 
 router
-  .get('/search', async ctx => {
+  .post('/search', async ctx => {
     let urls,ossList,warnUrls = [];
     // 获取参数
-    const query = ctx.query;
+    const body = ctx.body;
     // 检验参数
-    const checkParamsMsg = check(query, ['url']);
+    const checkParamsMsg = check(body, ['url']);
     if (Object.keys(checkParamsMsg).length) ctx.throw(401, failedUtil(checkParamsMsg, '401'));
 
     // 爬取图片列表
     try {
-      urls = await ins.spider(query.url);
+      urls = await ins.spider(body.url);
     } catch (err) {
       ctx.throw(err);
     }
