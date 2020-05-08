@@ -19,7 +19,7 @@ router
   .post('/search', async ctx => {
     let urls,ossList,warnUrls = [];
     // 获取参数
-    const body = ctx.body;
+    const body = ctx.request.body;
     // 检验参数
     const checkParamsMsg = check(body, ['url']);
     if (Object.keys(checkParamsMsg).length) ctx.throw(401, failedUtil(checkParamsMsg, '401'));
