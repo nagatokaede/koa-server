@@ -17,7 +17,7 @@ const router = new Router();
 
 router
   .post('/search', async ctx => {
-    let insUrls,judgeList,ossList,urls = [];
+    let judgeList,ossList,urls = [];
     const warnUrls = [];
     // 获取参数
     const body = ctx.request.body;
@@ -27,8 +27,8 @@ router
 
     // 爬取图片列表
     try {
-      insUrls = await ins.spider(body.url);
-      console.info(insUrls);
+      urls = await ins.spider(body.url);
+      console.info(urls);
     } catch (err) {
       ctx.throw(err);
     }
