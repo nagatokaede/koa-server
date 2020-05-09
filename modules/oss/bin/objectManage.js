@@ -23,6 +23,7 @@ async function judge (objectName, clientOptions) {
   const client = createClient(clientOptions);
   
   try {
+    console.info(new Date().getTime());
     let result = await client.get(objectName);
     if (result.res.status === 200) {
       return result.res.requestUrls;

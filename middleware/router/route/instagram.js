@@ -42,8 +42,10 @@ router
         const index = insUrls.indexOf(res);
         if (index > -1) insUrls.splice(index, 1);
         // 记录oss地址
-        urls.push(res[0]);
-        console.info(res);
+        if (res) {
+          urls.push(res[0]);
+          console.info(res[0]);
+        }
       });
     });
     // 批量鉴定
