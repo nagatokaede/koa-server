@@ -41,7 +41,6 @@ router
       return judge(url.match(regexp)[0], ctx.ossInfo).then(res => {
         // 删除已存在的 insUrl
         removeArray(insUrls, url);
-        console.info(insUrls);
         // 记录oss地址
         if (res) {
           urls.push(res[0]);
