@@ -50,6 +50,7 @@ router
     });
     // 批量鉴定
     await reqAll(judgeList);
+    console.info(insUrls);
 
     // 建立 axios 下载通道，建立阿里云OSS上传列表
     ossList = insUrls.map(async url => {
