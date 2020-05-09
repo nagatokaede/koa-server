@@ -25,7 +25,7 @@ async function judge (objectName, clientOptions) {
   try {
     let result = await client.get(objectName);
     if (result.res.status === 200) {
-      return result.res.requestUrls[0];
+      return result.res.requestUrls;
     }
   } catch (err) {
     if (err.code === 'NoSuchKey') {
@@ -38,6 +38,12 @@ async function judge (objectName, clientOptions) {
 /**
  * 列举文件
  * @param {object} clientOptions
+ * options {
+ *   prefix: 只列出符合特定前缀的文件。
+ *   marker: 只列出文件名大于 marker 之后的文件。
+ *   delimiter: 用于获取文件的公共前缀。
+ *   max-keys: 用于指定最多返回的文件个数。
+ * }
  * @param {object} options
  * @returns {Promise<*>}
  */

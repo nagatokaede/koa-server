@@ -90,4 +90,10 @@ const options = {
   accessKeySecret: "",
 };
 
-ossApi.judge('83592580_2805425739515761_7827284750852853400_n.jpg', options);
+(async function () {
+  console.time('list');
+  const info = await ossApi.judge('83592580_2805425739515761_7827284750852853400_n.jpg', options);
+  // const info = await ossApi.list(options, { prefix: '83592580_2805425739515761_7827284750852853400_n.jpg' });
+  console.timeEnd('list');
+  console.info(info);
+})();
