@@ -7,6 +7,7 @@ const { putStream, judge } = require('../../../modules/oss');
 const { console_level } = require('../../../server/config');
 const { succeedUtil, failedUtil } = require('../../../util/response');
 const check = require('../util/checkParams');
+const { removeArray } = require('../util/tool');
 
 const reqAll = require('../util/batchOSS');
 
@@ -39,8 +40,8 @@ router
     judgeList = insUrls.map( url => {
       return judge(url.match(regexp)[0], ctx.ossInfo).then(res => {
         // 删除已存在的 insUrl
-        const index = insUrls.indexOf(res);
-        if (index > -1) insUrls.splice(index, 1);
+        removeArray(insUrls, url);
+        console.info(insUrls);
         // 记录oss地址
         if (res) {
           urls.push(res[0]);
