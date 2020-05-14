@@ -1,4 +1,4 @@
-'use static';
+'use strict';
 
 const { getHtml, setConsoleLevel } = require('./bin/spider');
 

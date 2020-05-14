@@ -1,4 +1,4 @@
-'use static';
+'use strict';
 
 // const { listBuckets, putBucket, getBucketACL, putBucketACL, deleteBucket } = require('./bin/bucket');
 const { put, putStream } = require('./bin/upload');

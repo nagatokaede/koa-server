@@ -1,4 +1,4 @@
-'use Static';
+'use strict';
 
 const { PORT } = require('./config');
 

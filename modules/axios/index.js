@@ -1,4 +1,4 @@
-'use static';
+'use strict';
 
 const { downloadFile } = require('./bin/download');
 

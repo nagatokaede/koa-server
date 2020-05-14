@@ -1,4 +1,4 @@
-'use static';
+'use strict';
 
 const { failedUtil } = require('../util/response');
 const JWT = require('../util/jwt');

@@ -1,4 +1,4 @@
-'use static';
+'use strict';
 
 const Router = require('koa-router');
 const { userFindOne, userInsert } = require('../../../modules/mongo').user;

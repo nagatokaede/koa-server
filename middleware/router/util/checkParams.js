@@ -1,4 +1,4 @@
-'use static';
+'use strict';
 
 // 参数类型字典
 const dictionaries = {

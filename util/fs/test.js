@@ -1,4 +1,4 @@
-'use static';
+'use strict';
 
 const fs = require('./index');
 const path = require('path');

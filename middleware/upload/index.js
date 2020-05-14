@@ -1,4 +1,4 @@
-'use static';
+'use strict';
 
 const Busboy = require('busboy');
 const fs = require('fs');

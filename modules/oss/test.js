@@ -1,4 +1,4 @@
-'use static';
+'use strict';
 
 const ossApi = require('./index');
 const fs = require('fs');
