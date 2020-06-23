@@ -2,6 +2,7 @@
 
 const Router = require('koa-router');
 const { userFindOne, userInsert } = require('../../../modules/mongo').user;
+const { findOneAndRemove: captchaFindOneAndRemove } = require('../../../modules/mongo').captcha;
 const { succeedUtil, failedUtil } = require('../../../util/response');
 const { sign } = require('../../../util/jwt');
 const hash = require('../../../util/crypto');
@@ -15,8 +16,19 @@ router
     // 获取参数
     const body = ctx.request.body;
     // 验证参数
-    const checkParamsMsg = check(body, ['userName', 'password']);
+    const checkParamsMsg = check(body, ['userName', 'password', 'captchaId', 'captcha']);
     if (Object.keys(checkParamsMsg).length) ctx.throw(401, failedUtil(checkParamsMsg, '401'));
+
+    try {
+      // 校验 captcha
+      const captchaInfo = await captchaFindOneAndRemove({ captchaId: body.captchaId, captcha: body.captcha });
+      if (captchaInfo.status === 0) {
+        ctx.body = failedUtil('验证码错误', '002');
+        return 0;
+      }
+    } catch (err) {
+      ctx.throw(500, failedUtil(err, '001'));
+    }
 
     try {
       // 查询用户

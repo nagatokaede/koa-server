@@ -21,7 +21,7 @@ const app = new koa();
 
 app.use(logger);
 
-app.use(access(['admin', 'upload'], '60m'));
+app.use(access(['admin', 'upload', 'captcha'], '60m'));
 
 // 查询 oss 信息
 app.use(async (ctx , next) => {

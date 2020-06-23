@@ -11,8 +11,16 @@ const dictionaries = {
   accessKeySecret: 'string',
 
   url: 'string',
+  captchaId: 'string',
+  captcha: 'string',
 };
 
+/**
+ * 参数校验
+ * @param {Object} params - 入参
+ * @param {Array} filter - 校验列表
+ * @returns {{}} - '' 为空时验证通过
+ */
 module.exports = (params, filter) => {
   let msg = {};
   for (const key of filter) {
